@@ -7,7 +7,7 @@
   (:import (com.google.api.client.extensions.java6.auth.oauth2 AuthorizationCodeInstalledApp)
            (com.google.api.client.googleapis.auth.oauth2 GoogleClientSecrets GoogleAuthorizationCodeFlow$Builder)
            (com.google.api.client.googleapis.javanet GoogleNetHttpTransport)
-           (com.google.api.client.json.jackson2 JacksonFactory)
+           (com.google.api.client.json.gson GsonFactory)
            (com.google.api.client.util.store DataStoreFactory)
            (com.google.api.services.sheets.v4 Sheets$Builder)))
 
@@ -47,14 +47,14 @@
 (defn -main
   [& args]
   (let [{:keys [stock]} (:options (parse-opts args options-in))
-        service (google-service {::application-name "Google Sheets API Java Quickstart"
+        service (google-service {::application-name "Magic Sheet"
                            ::access-type      "offline"
                            ::port             8888
                            ::authorize        "user"
                            ::credentials      (config/credentials)
                            ::tokens-directory (config/tokens)
                            ::scopes           config/scopes
-                           ::json-factory     (JacksonFactory/getDefaultInstance)})
+                           ::json-factory     (GsonFactory/getDefaultInstance)})
         values (sheets-v4/get-values service
                            (:spreadsheet-id (config/sheet-config))
                            (:read-sheet-range (config/sheet-config)))
